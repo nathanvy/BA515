@@ -1,2 +1,2 @@
 * BA 515 - Fundamentals of Analytics and Tech
-This repository holds solutions to the in-class exercises for BA 515
+This repository holds solutions to the in-class exercises (aka "ICEs") for BA 515
