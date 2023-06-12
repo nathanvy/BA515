@@ -1,0 +1,249 @@
+% Created 2023-06-11 Sun 23:47
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Nathan Van Ymeren}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Nathan Van Ymeren},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.7-pre)}, 
+ pdflang={English}}
+\begin{document}
+
+\section*{In-Class Exercise 2}
+\label{sec:org7fdb26a}
+Nathan Van Ymeren
+\subsection*{Preface:}
+\label{sec:orgf6b97b7}
+
+First let's load the tidyverse:
+
+\begin{verbatim}
+library(tidyverse)
+\end{verbatim}
+
+\subsection*{Question 1, 1.42 pts}
+\label{sec:org4e19fed}
+\textbf{Copy the following code into R (note: don't worry if you don't know why this works..we didn't cover this code in class and the set.seed() or the runif() functions are not on the exam..this is just for fun..)}
+
+\begin{verbatim}
+set.seed(888)
+rand_vec <- runif(1000000, min = 0, max = 100)
+\end{verbatim}
+
+\textbf{You should have a vector of 1,000,000 randomly generated numbers starting with 2.55, 35.67, 6.14\ldots{}}
+
+\textbf{What is the standard deviation of \texttt{rand\_vec}?}
+
+\textbf{The answer is closest to:}
+\begin{enumerate}
+\item 0
+\item 22.390
+\item 25.663
+\item 27.483
+\item \emph{28.869}
+\end{enumerate}
+
+
+The standard deviation function is just \texttt{sd()} which I determined by the advanced technique of "Searching Google which leads you to the R Documentation website":
+
+\begin{verbatim}
+sd(rand_vec)
+\end{verbatim}
+
+\begin{verbatim}
+28.8693771657007
+\end{verbatim}
+
+
+
+Thus it's the fifth answer.
+
+\subsection*{Question 2, 1.43 pts}
+\label{sec:org902cac7}
+\textbf{The mtcars dataset is a built-in dataset in R. Some information about it can be found \href{https://rpubs.com/neros/61800}{here}.}
+
+\textbf{To see mtcars in your Environment page, you can create a new data frame by entering the following comand in the Console:}
+
+\begin{verbatim}
+my_cars <- mtcars
+\end{verbatim}
+
+
+\textbf{Question: The whole dataset has \texttt{\_\_\_\_}  rows (i.e., observations), and \texttt{\_\_\_\_} columns (i.e., variables)}
+\begin{verbatim}
+nrow(my_cars)
+\end{verbatim}
+
+\begin{verbatim}
+32
+\end{verbatim}
+
+
+\begin{verbatim}
+ncol(my_cars)
+\end{verbatim}
+
+\begin{verbatim}
+11
+\end{verbatim}
+
+
+Thus the answers are 32 and 11.
+
+\subsection*{Question 3, 1.43 pts}
+\label{sec:org8001247}
+\textbf{What is the minimum value of mpg and the maximum value of hp, respectively? (rounded to one decimal place)}
+\begin{enumerate}
+\item 10.4; 52
+\item 15.0; 335
+\item 10.4; 205
+\item 10.4; 335
+\item None of the above.
+\end{enumerate}
+
+
+\begin{verbatim}
+min(my_cars$mpg)
+\end{verbatim}
+
+\begin{verbatim}
+10.4
+\end{verbatim}
+
+
+\begin{verbatim}
+max(my_cars$hp)
+\end{verbatim}
+
+\begin{verbatim}
+335
+\end{verbatim}
+
+
+Thus the answer is the fourth choice.
+
+\subsection*{Question 4, 1.43 pts}
+\label{sec:org5b0269c}
+\textbf{What is the average horsepower for all cars in the \texttt{my\_cars} dataset? Fill in below, round to one decimal place.}
+\begin{verbatim}
+round( mean( my_cars$hp ), digits = 1 )
+\end{verbatim}
+
+\begin{verbatim}
+146.7
+\end{verbatim}
+
+\subsection*{Question 5, 1.43 pts}
+\label{sec:org43fa858}
+\textbf{Suppose you have created the following vectors:}
+\begin{verbatim}
+v1 <- c(5, 10, 15)
+v2 <- c("Red", "Yellow", "Blue")
+v3 <- c("a", "b")
+\end{verbatim}
+
+\textbf{Now, you want to create a data frame called df1 that contains these three vectors.}
+
+\textbf{True or False: The following code will successfully create that data frame:}
+
+\begin{verbatim}
+df1 <- data.frame(v1, v2, v3)
+\end{verbatim}
+
+It's false because \texttt{v3} has length 2, whereas \texttt{v1} and \texttt{v2} have length 3.  Dataframes need to be rectangular, and we can confirm this by running the code and seeing R complain about mismatched lengths, thus the answer is False.
+
+\subsection*{Question 6, 1.43 pts}
+\label{sec:org630ac1a}
+\textbf{Suppose you run the following code to create a data frame:}
+\begin{verbatim}
+mydf <- data_frame(
+  a = c(1,2,3,NA,5),
+  b = c(1,4,9,NA,25)
+)
+\end{verbatim}
+
+\textbf{View the dataframe before completing the following questions, using the View(mydf) command.}
+
+I won't use \texttt{View()} when creating a pdf, but the df looks like this:
+
+\begin{center}
+\begin{tabular}{rr}
+a & b\\[0pt]
+\hline
+1 & 1\\[0pt]
+2 & 4\\[0pt]
+3 & 9\\[0pt]
+NA & NA\\[0pt]
+5 & 25\\[0pt]
+\end{tabular}
+\end{center}
+
+\textbf{How would you calculate the variance of the a column in mydf based on non-missing values? Select all possible options that would do this. If none of them work, then select none of the above.}
+
+\begin{enumerate}
+\item \texttt{var(a, na.rm = TRUE)}
+\item \texttt{var(a, na.rm = FALSE)}
+\item \texttt{var(mydf\$a, na.rm = TRUE)}
+\item \texttt{var(mydf\$a, na.rm = FALSE)}
+\item None of the above (if you choose this option do NOT choose any of the other options)
+\end{enumerate}
+
+
+You can run them all and see that they all work but what's important to note is that \texttt{a} is declared only inside the parentheses of the \texttt{data\_frame()} function, which means there isn't a global variable \texttt{a}, and \texttt{a} only exists as a column within \texttt{mydf} so we need to reference it with the \texttt{\$} operator.  We want to exclude missing values so you need to pick the one with \texttt{na.rm = TRUE} as well as the one that uses the \texttt{\$} operator, and that's the fourth choice.
+
+\subsection*{Question 7, 1.43 pts}
+\label{sec:orga9c07c0}
+\textbf{You would now like to count the number of NA values in column a from the dataframe mydf. Select all possible lines of code that can achieve this. If none of them work, then select none of the above.}
+\begin{enumerate}
+\item \texttt{sum(is.na(mydf\$a))}
+\item \texttt{sum(is.na(a))}
+\item \texttt{sum(mydf\$a, na.rm = TRUE)}
+\item \texttt{sum(a, na.rm = TRUE)}
+\item \texttt{None of the above}
+\end{enumerate}
+
+
+Similar to Q6.  To calculate the number of NA values in column \texttt{a} we need to test each value with \texttt{is.na()} which produces a vector:
+
+\begin{verbatim}
+is.na(mydf$a)
+\end{verbatim}
+
+\begin{center}
+\begin{tabular}{l}
+FALSE\\[0pt]
+FALSE\\[0pt]
+FALSE\\[0pt]
+TRUE\\[0pt]
+FALSE\\[0pt]
+\end{tabular}
+\end{center}
+
+Remembering the principle of implicit coercion we can just sum this whole vector we just produced:
+
+\begin{verbatim}
+sum( is.na( mydf$a ) )
+\end{verbatim}
+
+\begin{verbatim}
+1
+\end{verbatim}
+
+
+And that result of 1 matches what we can plainly see from the declaration of \texttt{mydf} in question 6, so the answer to this question is the first choice.
+\end{document}
