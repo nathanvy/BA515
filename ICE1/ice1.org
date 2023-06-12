@@ -1,0 +1,178 @@
+#+STARTUP: inlineimages
+#+OPTIONS: num:nil toc:nil
+* In-Class Exercise 1
+Nathan Van Ymeren
+** Question 1 - 1.11 pts
+*As you create (i.e., assign) objects in an R session, the objects will appear in the*
+a) Console
+b) /Environment/
+c) Viewer
+d) Object Page
+e) None of the above
+** Question 2 - 1.11 pts
+*Suppose you are looking through some R code on the Internet for fun, and you come across this:*
+
+*Running* ~abs(-5) == -5~ *returns* ~FALSE~.
+
+*You are confused by how this outcome was achieved, and you would like to know more about this abs function.*
+
+*Then you would run ~_____~  to look it up in the help window.*
+
+You'd run ~?abs~ or ~help(abs)~.
+** Question 3 - 1.11 pts
+*If you execute the following code, R will return the output of 5.*
+
+*True / False*
+
+#+begin_src R :session :exports both
+  a <- 3
+  b <- 2
+  elsa <- 2 * (a + b)
+  elsa / 2
+#+end_src
+
+#+RESULTS:
+: 5
+
+Easy enough, just run it and see above that the result is 5, therefore it's True.
+** Question 4 - 1.11 pts
+*Suppose you are naming an object in R. Which of the following would result in an error? Select all that apply.*
+(just run each one and see if it produces an error)
+#+begin_src R :session :exports both
+if_red <- 2
+#+end_src
+
+#+RESULTS:
+: 2
+#+begin_src R :session :exports both
+.205 <- "COMM 205"
+#+end_src
+
+#+RESULTS:
+(produces error)
+
+#+begin_src R :session :exports both
+Sauder_School.Of_Business <- "Sauder"
+#+end_src
+
+#+RESULTS: 
+: Sauder
+
+#+begin_src R :session :exports both
+TRUE <- "true"
+#+end_src
+
+#+RESULTS:
+(produces error)
+
+Thus it's a) and d)
+** Question 5 - 1.11 pts
+*If you enter ~typeof("TRUE")~ into the Console and press enter, what will R return?*
+a) TRUE
+b) FALSE
+c) "logical"
+d) "character"
+e) "double"
+
+
+Just run it!
+
+#+begin_src R :session :exports both
+  typeof("TRUE")
+#+end_src
+
+#+RESULTS:
+: character
+
+Thus the answer is d.
+** Question 6 - 1.11 pts
+
+*Suppose you typed the following four lines of code in R console and executed them.*
+
+Ok let's do just that: 
+#+begin_src R :session :exports both
+  a <- 5
+  b <- 4
+  c <- TRUE
+  a + b - c
+#+end_src
+
+#+RESULTS:
+: 8
+
+*What will be displayed on the Console after the last line of code?*
+
+a) an error
+b) 9
+c) /8/
+d) 7
+e) there is not enough information in the question to determine the answer
+
+
+This is due to "Implicit Conversion/Coercion/Casting" wherein ~TRUE~ can be interpreted as 1 and ~FALSE~ can be interpreted as 0, so you end up doing ~9 - 1 = 8~
+** Question 7 - 1.11 pts
+*We want to run the following code:*
+
+~typeof("integer") ______  "character"~
+
+*so that we return a value of TRUE. What do we need to fill in?*
+
+So the idea here is that you fill in the blank such that the Boolean expression returns "TRUE" in the console.  That means we need a boolean operator like ~>~, ~<~, ~&~, etc.  The ~typeof()~ function returns a character string that describes the type of the argument we pass to it.  We want to check if its output is the same as ~"character"~ so we must therefore use the ~==~ operator.
+
+#+begin_src R :session :exports both
+  typeof("integer") == "character"
+#+end_src
+
+#+RESULTS:
+: TRUE
+** Question 8 - 1.11 pts
+*True or False: Suppose you enter the following in the console:*
+
+~!FALSE~
+
+*This will return the same result as if you typed in the following in the console:*
+
+~TRUE & FALSE~
+
+a) True
+b) False
+
+
+Just run them both:
+#+begin_src R :session :exports both
+  !FALSE
+#+end_src
+
+#+RESULTS:
+: TRUE
+
+That makes logical sense (pun intended) since "not false" must be "true".  What about the second expression?
+
+#+begin_src R :session :exports both
+  TRUE & FALSE
+#+end_src
+
+#+RESULTS:
+: FALSE
+
+The two expressions do not return the same value, thus the answer to the question is b, false.
+** Question 9 - 1.12 pts
+They give you this code and ask what the result is, just run it:
+
+#+begin_src R :session :exports both
+  my_courses <- c("BA 515", "BAAC 551", "BAFI 500")
+  my_courses[4:5] <- c("BA 520", "BAHR 550")
+  length(my_courses)
+#+end_src
+
+#+RESULTS:
+: 5
+
+*The above code will result in:*
+a) 2
+b) 3
+c) 4
+d) /5/
+e) An error
+
+

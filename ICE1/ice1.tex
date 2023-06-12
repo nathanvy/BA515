@@ -1,0 +1,236 @@
+% Created 2023-06-11 Sun 23:07
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Nathan Van Ymeren}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Nathan Van Ymeren},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.7-pre)}, 
+ pdflang={English}}
+\begin{document}
+
+\section*{In-Class Exercise 1}
+\label{sec:org993d457}
+Nathan Van Ymeren
+\subsection*{Question 1 - 1.11 pts}
+\label{sec:org1a52a24}
+\textbf{As you create (i.e., assign) objects in an R session, the objects will appear in the}
+\begin{enumerate}
+\item Console
+\item \emph{Environment}
+\item Viewer
+\item Object Page
+\item None of the above
+\end{enumerate}
+\subsection*{Question 2 - 1.11 pts}
+\label{sec:orgdc956fa}
+\textbf{Suppose you are looking through some R code on the Internet for fun, and you come across this:}
+
+\textbf{Running} \texttt{abs(-5) == -5} \textbf{returns} \texttt{FALSE}.
+
+\textbf{You are confused by how this outcome was achieved, and you would like to know more about this abs function.}
+
+\textbf{Then you would run \texttt{\_\_\_\_\_}  to look it up in the help window.}
+
+You'd run \texttt{?abs} or \texttt{help(abs)}.
+\subsection*{Question 3 - 1.11 pts}
+\label{sec:orgeb3644c}
+\textbf{If you execute the following code, R will return the output of 5.}
+
+\textbf{True / False}
+
+\begin{verbatim}
+a <- 3
+b <- 2
+elsa <- 2 * (a + b)
+elsa / 2
+\end{verbatim}
+
+\begin{verbatim}
+5
+\end{verbatim}
+
+
+Easy enough, just run it and see above that the result is 5, therefore it's True.
+\subsection*{Question 4 - 1.11 pts}
+\label{sec:org7c0f2a6}
+\textbf{Suppose you are naming an object in R. Which of the following would result in an error? Select all that apply.}
+(just run each one and see if it produces an error)
+\begin{verbatim}
+if_red <- 2
+\end{verbatim}
+
+\begin{verbatim}
+2
+\end{verbatim}
+
+\begin{verbatim}
+.205 <- "COMM 205"
+\end{verbatim}
+
+(produces error)
+
+\begin{verbatim}
+Sauder_School.Of_Business <- "Sauder"
+\end{verbatim}
+
+\begin{verbatim}
+Sauder
+\end{verbatim}
+
+
+\begin{verbatim}
+TRUE <- "true"
+\end{verbatim}
+
+(produces error)
+
+Thus it's a) and d)
+\subsection*{Question 5 - 1.11 pts}
+\label{sec:org827032d}
+\textbf{If you enter \texttt{typeof("TRUE")} into the Console and press enter, what will R return?}
+\begin{enumerate}
+\item TRUE
+\item FALSE
+\item "logical"
+\item "character"
+\item "double"
+\end{enumerate}
+
+
+Just run it!
+
+\begin{verbatim}
+typeof("TRUE")
+\end{verbatim}
+
+\begin{verbatim}
+character
+\end{verbatim}
+
+
+Thus the answer is d.
+\subsection*{Question 6 - 1.11 pts}
+\label{sec:org02dab05}
+
+\textbf{Suppose you typed the following four lines of code in R console and executed them.}
+
+Ok let's do just that: 
+\begin{verbatim}
+a <- 5
+b <- 4
+c <- TRUE
+a + b - c
+\end{verbatim}
+
+\begin{verbatim}
+8
+\end{verbatim}
+
+
+\textbf{What will be displayed on the Console after the last line of code?}
+
+\begin{enumerate}
+\item an error
+\item 9
+\item \emph{8}
+\item 7
+\item there is not enough information in the question to determine the answer
+\end{enumerate}
+
+
+This is due to "Implicit Conversion/Coercion/Casting" wherein \texttt{TRUE} can be interpreted as 1 and \texttt{FALSE} can be interpreted as 0, so you end up doing \texttt{9 - 1 = 8}
+\subsection*{Question 7 - 1.11 pts}
+\label{sec:orgc558c68}
+\textbf{We want to run the following code:}
+
+\texttt{typeof("integer") \_\_\_\_\_\_  "character"}
+
+\textbf{so that we return a value of TRUE. What do we need to fill in?}
+
+So the idea here is that you fill in the blank such that the Boolean expression returns "TRUE" in the console.  That means we need a boolean operator like \texttt{>}, \texttt{<}, \texttt{\&}, etc.  The \texttt{typeof()} function returns a character string that describes the type of the argument we pass to it.  We want to check if its output is the same as \texttt{"character"} so we must therefore use the \texttt{==} operator.
+
+\begin{verbatim}
+typeof("integer") == "character"
+\end{verbatim}
+
+\begin{verbatim}
+TRUE
+\end{verbatim}
+\subsection*{Question 8 - 1.11 pts}
+\label{sec:orgb9bfe36}
+\textbf{True or False: Suppose you enter the following in the console:}
+
+\texttt{!FALSE}
+
+\textbf{This will return the same result as if you typed in the following in the console:}
+
+\texttt{TRUE \& FALSE}
+
+\begin{enumerate}
+\item True
+\item False
+\end{enumerate}
+
+
+Just run them both:
+\begin{verbatim}
+!FALSE
+\end{verbatim}
+
+\begin{verbatim}
+TRUE
+\end{verbatim}
+
+
+That makes logical sense (pun intended) since "not false" must be "true".  What about the second expression?
+
+\begin{verbatim}
+TRUE & FALSE
+\end{verbatim}
+
+\begin{verbatim}
+FALSE
+\end{verbatim}
+
+
+The two expressions do not return the same value, thus the answer to the question is b, false.
+\subsection*{Question 9 - 1.12 pts}
+\label{sec:org9740d7a}
+They give you this code and ask what the result is, just run it:
+
+\begin{verbatim}
+my_courses <- c("BA 515", "BAAC 551", "BAFI 500")
+my_courses[4:5] <- c("BA 520", "BAHR 550")
+length(my_courses)
+\end{verbatim}
+
+\begin{verbatim}
+5
+\end{verbatim}
+
+
+\textbf{The above code will result in:}
+\begin{enumerate}
+\item 2
+\item 3
+\item 4
+\item \emph{5}
+\item An error
+\end{enumerate}
+\end{document}
