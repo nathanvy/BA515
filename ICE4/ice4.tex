@@ -1,4 +1,4 @@
-% Created 2023-06-26 Mon 00:21
+% Created 2023-06-26 Mon 00:42
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -28,10 +28,10 @@
 \begin{document}
 
 \section*{In-Class Exercise 4}
-\label{sec:orga6801f0}
+\label{sec:orgec7b4cb}
 Nathan Van Ymeren
 \subsection*{Preface:}
-\label{sec:orge95d313}
+\label{sec:orgdd4c88f}
 In previous documents I reproduced the question text entirely.  This time to make it clearer I'm going to omit the question text and just have some explanatory prose in each section.
 
 First let's load the tidyverse and our dataset:
@@ -41,7 +41,7 @@ library(tidyverse)
 companies = readRDS("../ICE3/North American Stock Market 1994-2018.rds")
 \end{minted}
 \subsection*{Question 1, 1.25 pts}
-\label{sec:org0ff704a}
+\label{sec:orge48db4b}
 Okay so right away I have a feeling this quiz is going to be an awful lot of \texttt{group\_by()} which is annoying because underscores are awkward to type quickly.  But I digress.  The question asks us to compute aggregate values for all companies, per fiscal year, so that's our cue to group by \texttt{fyear}.
 
 \begin{minted}[,frame=single]{r}
@@ -61,7 +61,7 @@ That's a long pipeline.  What we did there is first remove the rows with fiscal 
 \end{verbatim}
 
 \subsection*{Question 2, 1.25 pts}
-\label{sec:org02dc841}
+\label{sec:org9198e7e}
 Pretty straightforward.  First we'll group by \texttt{gvkey} and then we'll compute a maximum asset value for each group.  Then we will drop all rows where the maximum value is less than 100.
 
 \begin{minted}[,frame=single]{r}
@@ -80,7 +80,7 @@ Interestingly enough, the answer is "none of the above":
 \end{verbatim}
 
 \subsection*{Question 3, 1.25 pts}
-\label{sec:orgcb69982}
+\label{sec:org5464515}
 This question asks us to run the following code and describe its contents/what it represents.  I'll reproduce only the first few rows for brevity:
 
 \begin{minted}[,frame=single]{r}
@@ -110,7 +110,7 @@ Which looks something like this:
 The query is grouping by fiscal year and location, and then computing an aggregate maximum sales figure for each grouping.  So I'd say it's "maximum sales, per fiscal year, per country", which is pretty close to what answer D describes.
 
 \subsection*{Question 4, 1.25 pts}
-\label{sec:org89c107c}
+\label{sec:orgee16427}
 Okay so this one is long-winded but pretty straightforward if you work backwards:
 
 \begin{enumerate}
@@ -159,7 +159,7 @@ We can see that it has 42 variables, as the question implies it ought to:
 Thus the answer is A.
 
 \subsection*{Question 5, 1.25 pts}
-\label{sec:org9ff7ac4}
+\label{sec:orgc067504}
 Okay so we run the code they give us and replace the commented section with something to produce something sorted as such:
 
 \begin{center}
@@ -172,7 +172,7 @@ Looking at the image we can see it's pretty clearly sorted by \texttt{naicsh}, w
 You could just run each code snippet to see which one produces output like the image but you can just look and see that only answer B will actually do a sort, subsort, and sub-subsort in the correct order.  Answer A does the correct sorting but in the wrong order.  Answer F might come close but because you're piping each sort operation into the next what it does is just sort the dataframe three times without doing sub-sorts.   So, the answer is B.
 
 \subsection*{Question 6, 1.25 pts}
-\label{sec:org3b3dca6}
+\label{sec:org3fe28db}
 The default sort order is ascending, so what this code is doing is sorting by \texttt{a}, ascending, and then either sorting by \texttt{b} ascending or descending within each \texttt{a}.  This implies:
 
 \begin{enumerate}
@@ -185,14 +185,16 @@ The other answers are insufficient (this question reminds me of the GMAT, haha)
 
 \newpage
 \subsection*{Question 7, 1.25 pts}
-\label{sec:org7c68d0d}
-Starting with \texttt{companies} we'll drop all rows that have \texttt{at < 100} or \texttt{sale < 100} and we'll drop any rows with missing employment, sales, or assets.  Then after that we'll \texttt{group\_by()} company (aka \texttt{gvkey}) and compute average employment per firm where \texttt{loc==USA} in fiscal years 2016, 2017, and 2018.  The question asks how many firms would be included in this calculation.  Let's find out.  Reminder that filtering returns rows where the condition is true, so we need to invert some of these inequalities.
+\label{sec:orgabf58a8}
+Starting with \texttt{companies} we'll drop all rows that have \texttt{at < 100} or \texttt{sale < 100} and we'll drop any rows with missing employment, sales, or assets.  Then after that we'll \texttt{group\_by()} company (aka \texttt{gvkey}) and compute average employment per firm where \texttt{loc==USA} in fiscal years 2016, 2017, and 2018.  The question asks how many firms would be included in this calculation.  Let's find out.  Reminder that filtering returns rows where the condition is true, so we need to invert some of these inequalities which means you need to change the OR to an AND.  Thanks Eric for the nudge in the right direction on this one.
 
 \begin{minted}[,frame=single]{r}
   q7 = companies %>%
     filter(!is.na(emp), !is.na(sale), !is.na(at)) %>%
-    filter(at >= 100 | sale >= 100) %>%
-    filter( (fyear <= 2018) & (fyear >= 2016) ) %>%
+    filter(at >= 100) %>%
+    filter(sale >= 100) %>%
+    filter(fyear <= 2018) %>%
+    filter(fyear >= 2016) %>%
     filter(loc == "USA") %>%
     group_by(gvkey)
 
@@ -202,23 +204,27 @@ n_distinct(q7$gvkey)
 The question asks how many companies there are, but because we're filtering by multiple fiscal years we'll end up with an inflated count if we just use \texttt{nrow()} so instead we'll count the number of unique \texttt{gvkey} values using \texttt{n\_distinct()} which gives:
 
 \begin{verbatim}
-4181
+3328
 \end{verbatim}
 
+
+\newpage
+
 \subsection*{Question 8, 1.25 pts}
-\label{sec:orgb0903fd}
+\label{sec:orgd4850e3}
 This question is worded very confusingly.  I had no idea what it was even asking for, so thank you to my awesome classmates for interpreting.  Apparently "average per firm" means "take an average of each firms' employment figures in the 3 year period, then average those all together".  So, here that is:
 
 \begin{minted}[,frame=single]{r}
-q8 = q7 %>%
-  mutate(avgemp = mean(emp)) %>%
-  summarize(avgavg = mean(avgemp)) %>%
-  summarize(avgavgavg = mean(avgavg))
+  q8 = q7 %>%
+    mutate(memp = mean(emp)) %>%
+    summarize(mmemp = mean(memp))
+
+round(mean(q8$mmemp), 2)
 \end{minted}
 
-So assuming that's what the question meant it's 10.4 thousand.
+So assuming that's what the question meant it's 13 thousand.
 
 \begin{verbatim}
-10.4146899465838
+13.04
 \end{verbatim}
 \end{document}

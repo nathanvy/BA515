@@ -144,14 +144,16 @@ The other answers are insufficient (this question reminds me of the GMAT, haha)
 
 #+LATEX: \newpage
 ** Question 7, 1.25 pts
-Starting with ~companies~ we'll drop all rows that have ~at < 100~ or ~sale < 100~ and we'll drop any rows with missing employment, sales, or assets.  Then after that we'll ~group_by()~ company (aka ~gvkey~) and compute average employment per firm where ~loc==USA~ in fiscal years 2016, 2017, and 2018.  The question asks how many firms would be included in this calculation.  Let's find out.  Reminder that filtering returns rows where the condition is true, so we need to invert some of these inequalities.
+Starting with ~companies~ we'll drop all rows that have ~at < 100~ or ~sale < 100~ and we'll drop any rows with missing employment, sales, or assets.  Then after that we'll ~group_by()~ company (aka ~gvkey~) and compute average employment per firm where ~loc==USA~ in fiscal years 2016, 2017, and 2018.  The question asks how many firms would be included in this calculation.  Let's find out.  Reminder that filtering returns rows where the condition is true, so we need to invert some of these inequalities which means you need to change the OR to an AND.  Thanks Eric for the nudge in the right direction on this one.
 
 #+ATTR_LATEX: :options frame=single
 #+begin_src R :session
     q7 = companies %>%
       filter(!is.na(emp), !is.na(sale), !is.na(at)) %>%
-      filter(at >= 100 | sale >= 100) %>%
-      filter( (fyear <= 2018) & (fyear >= 2016) ) %>%
+      filter(at >= 100) %>%
+      filter(sale >= 100) %>%
+      filter(fyear <= 2018) %>%
+      filter(fyear >= 2016) %>%
       filter(loc == "USA") %>%
       group_by(gvkey)
 
@@ -161,21 +163,27 @@ Starting with ~companies~ we'll drop all rows that have ~at < 100~ or ~sale < 10
 The question asks how many companies there are, but because we're filtering by multiple fiscal years we'll end up with an inflated count if we just use ~nrow()~ so instead we'll count the number of unique ~gvkey~ values using ~n_distinct()~ which gives:
 
 #+RESULTS:
-: 4181
+: 3328
+
+#+LATEX: \newpage
 
 ** Question 8, 1.25 pts
 This question is worded very confusingly.  I had no idea what it was even asking for, so thank you to my awesome classmates for interpreting.  Apparently "average per firm" means "take an average of each firms' employment figures in the 3 year period, then average those all together".  So, here that is:
 
 #+ATTR_LATEX: :options frame=single
 #+begin_src R :session
-  q8 = q7 %>%
-    mutate(avgemp = mean(emp)) %>%
-    summarize(avgavg = mean(avgemp)) %>%
-    summarize(avgavgavg = mean(avgavg))
-#+end_src
+      q8 = q7 %>%
+	mutate(memp = mean(emp)) %>%
+	summarize(mmemp = mean(memp))
 
-So assuming that's what the question meant it's 10.4 thousand.
+    round(mean(q8$mmemp), 2)
+  #+end_src
 
-#+RESULTS:
-: 10.4146899465838
+  So assuming that's what the question meant it's 13 thousand.
+  
+  #+RESULTS:
+  : 13.04
+
+
+
 
