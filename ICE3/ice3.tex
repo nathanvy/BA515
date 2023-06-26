@@ -1,0 +1,212 @@
+% Created 2023-06-25 Sun 21:29
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{minted}
+\usepackage{parskip}
+\author{Nathan Van Ymeren}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Nathan Van Ymeren},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2 (Org mode 9.7-pre)}, 
+ pdflang={English}}
+\begin{document}
+
+\section*{In-Class Exercise 3}
+\label{sec:org73d284c}
+Nathan Van Ymeren
+\subsection*{Preface:}
+\label{sec:org2bfdc8b}
+In previous documents I reproduced the question text entirely.  This time to make it clearer I'm going to omit the question text and just have some explanatory prose in each section.
+
+First let's load the tidyverse and our dataset:
+
+\begin{minted}[,frame=single]{r}
+library(tidyverse)
+companies = readRDS("North American Stock Market 1994-2018.rds")
+
+\end{minted}
+
+\subsection*{Question 1, 1.25 pts}
+\label{sec:org6098419}
+The question asks us, across all 288,158 observations in all 41 variables in the "companies" dataset, how many NA's are there in total?  There's a handy hint that \texttt{is.na()} works with data frames, which is great because we can just do the following:
+
+\begin{minted}[,frame=single]{r}
+sum(is.na(companies))
+\end{minted}
+
+Which returns our answer, which is choice D.
+\begin{verbatim}
+1637332
+\end{verbatim}
+
+\subsection*{Question 2, 1.25 pts}
+\label{sec:org89d98aa}
+We're being asked to find the minimum value of the \texttt{sale} variable within the dataset, and the answer choices are rounded to one decimal place.  For that we'll use the janky "dollar sign" syntax to access the \texttt{sale} column, and give that as an argument to the \texttt{min()}  function, which returns the minimum value in a list or a vector.  Then we'll give all \emph{that} as the argument to the \texttt{round()} function, which will round to the desired number of decimal places.
+
+Remember from Q1, though, that there are like 1.6 million NA's in this data set so if we just ask for the minimum value we'll probably get NA.  That means we should set \texttt{na.rm=TRUE} when we call \texttt{min()}:
+
+\begin{minted}[,frame=single]{r}
+round( min( companies$sale, na.rm=TRUE ), digits=1 )
+\end{minted}
+
+And the answer is B:
+\begin{verbatim}
+-15009.3
+\end{verbatim}
+
+\subsection*{Question 3, 1.25 pts}
+\label{sec:orgcd99d32}
+Now we're being asked to find all the observations (rows) where the variables \texttt{at} and \texttt{lt} are greater than or equal to \$10M, but since the numbers are stored in millions we're going to be doing something like \texttt{lt >= 10}.  We want to keep all the observations (rows) where this is true, meaning we don't want to drop columns, so this suggests we should reach for the \texttt{filter()} function and pass it a predicate stipulating \texttt{whatever >= 10}.  Then, we need to take that screened sample and find the highest ration of \texttt{at} to \texttt{lt}.  So my first instinct is to do it this way:
+
+\begin{enumerate}
+\item Make a new data frame by filtering \texttt{companies}
+\item Make a new column in that new data frame where the values are \texttt{at/lt}
+\item Find the max of that.
+\end{enumerate}
+
+
+Let's see if it works, using \texttt{magrittr}-style pipes. I'm going to add the \texttt{gvkey} variable because I see we'll need it for the next question.
+
+\begin{minted}[,frame=single]{r}
+  q3 = companies %>%
+    select(gvkey, lt, at) %>%
+    filter(lt>=10, at>=10, !is.na(lt), !is.na(at)) %>%
+    mutate(ratio = at/lt)
+
+max(q3$ratio)
+\end{minted}
+
+We could round that if we wanted but it's close enough to see that the answer is B:
+
+\begin{verbatim}
+423.585221582374
+\end{verbatim}
+
+\subsection*{Question 4, 1.25 pts}
+\label{sec:org72157d3}
+We can reuse a bunch of the work from the previous question to find the \texttt{gvkey}, which is like an index number, of the company with the highest ratio:
+
+\begin{minted}[,frame=single]{r}
+q3 %>%
+  filter(ratio == max(ratio)) %>%
+  pull(gvkey)
+\end{minted}
+What we're doing here is taking the dataset we made in question 3, filtering it such that we only keep rows where the ratio is equal to the maximum ratio (and there should only be one row, but in this case it's easy to check in the console), and then thanks to the magic of \texttt{pull()} we can just extract the value in the \texttt{gvkey} column, which is answer E:
+
+\begin{verbatim}
+151971
+\end{verbatim}
+
+\subsection*{Question 5, 1.25 pts}
+\label{sec:org2f95fc8}
+Okay so what's interesting here is it's asking us to actually read and understand code rather than just run it.  Off the top of my head I can think of two or three ways to calculate the fraction of companies where \texttt{at > 1000} in fiscal year 2007, but one of the (few) nice things about R is never having to write loops, so if we're doing it "the \texttt{dplyr} way" we'd need to filter for:
+
+\begin{enumerate}
+\item fiscal year
+\item assets
+\end{enumerate}
+
+
+And then we'd need to count all the companies in that set.  Then we'd create a second set where we only filter for fiscal year, count each set, and then divide the first set by the second.  You can see right away by looking at the answers that only two of them use the \texttt{n()} function which returns the number of items in a vector/list, so right away we know those are the only two viable choices  (unless it's none of them).  The first, answer B, uses \texttt{select()} to compute the numerator and denominator.  This is an error, because \texttt{select()} operates on columns, but you want to drop rows where \texttt{fyear != 2007} and the way to exclude rows is by using \texttt{filter()}.  So logically we can conclude the only choice is between answers D or E.
+
+Let's just see what D gives us in greater detail.  First we compute the numerator:
+
+\begin{minted}[,frame=single]{r}
+numerator1 = companies %>%
+  filter(fyear == 2007, at > 1000) %>%
+  summarize(n())
+\end{minted}
+
+Which gives:
+
+\begin{verbatim}
+2849
+\end{verbatim}
+
+
+Seems reasonable.  Let's check the denominator.
+
+\begin{minted}[,frame=single]{r}
+denominator = companies %>%
+  filter(fyear == 2007) %>%
+  summarize(n())
+\end{minted}
+
+And that gives:
+
+\begin{verbatim}
+10870
+\end{verbatim}
+
+
+Also seems reasonable.  We don't have an answer to compare against but we can divide them and round just for fun:
+
+\begin{minted}[,frame=single]{r}
+round(numerator1/denominator, 3)
+\end{minted}
+
+And that comes out to:
+
+\begin{verbatim}
+0.262
+\end{verbatim}
+
+
+So, 26\% of companies in 2007 have assets greater than \$1B?  I buy it.  I chose answer D.
+
+\subsection*{Question 6, 1.25 pts}
+\label{sec:org1488dab}
+We want "only the following columns": company name, employment, fiscal year.  That we want to choose entire columns is our cue to use \texttt{select()}, and also remove any rows were employment is missing values, which is our cue to use \texttt{filter()}, and then again we also want to limit our analysis to fiscal year 2010.  This is a slight variation on the previous question, so we can follow a similar approach:
+
+\begin{enumerate}
+\item Run a selection on \texttt{companies} for \texttt{conm}, \texttt{emp}, and \texttt{fyear}
+\item Filter that selection for \texttt{fyear == 2010} and \texttt{!is.na(emp)}
+\end{enumerate}
+
+
+We can see by inspecting the available choices that only options C and D correctly use \texttt{select()} and of those two, only C uses the predicate correctly.  Answer D uses \texttt{na.rm=TRUE} which is not a Boolean expression and thus not a predicate.  For calls to \texttt{filter()} we need to use expressions that evaluate to either TRUE or FALSE, which means we need to call the \texttt{is.na()} predicate function, thus the answer is C.
+
+\subsection*{Question 7, 1.25 pts}
+\label{sec:orgc7bb54f}
+Now we get to actually run the code from Question 6 so let's do that, and pipe that into \texttt{max()} and \texttt{min()}, and then subtract them.
+
+\begin{minted}[,frame=single]{r}
+  q7max = companies %>%
+    select(conm, emp, fyear) %>%
+    filter(!is.na(emp), fyear ==2010) %>%
+    summarize(maxemp = max(emp))
+
+  q7min = companies %>%
+    select(conm, emp, fyear) %>%
+    filter(!is.na(emp), fyear ==2010) %>%
+    summarize(minemp = min(emp))
+
+q7max - q7min
+\end{minted}
+
+That's pretty straightforward.  I bet there's an elegant way to do the whole thing in one pipeline but whatever.  Our answer is B:
+
+\begin{verbatim}
+2100
+\end{verbatim}
+
+\subsection*{Question 8, 1.25 pts}
+\label{sec:orgc149948}
+Continuing from the previous, we're asked to take the dataset (which the quiz calls \texttt{df1} but I called something else) and add a new variable.  This is our cue right away to start thinking of \texttt{mutate()} which adds variables.  It wants us to list actual employment, which in the data is represented in thousands.  So it should be a simple matter of calling something like \texttt{mutate(emp\_actual = emp * 1000)}.  Looking at the choices we can see that D is multiplying by too large a constant.  Answer C is using \texttt{==}, the equality test operator, and not \texttt{=} which is the assignment operator.  So that leaves answers A and B, of which A starts the pipeline with the full \texttt{companies} dataset.  But it doesn't do all the steps to filter and select from the original data, so we'd have way too many columns and rows if we went with A.  Thus by process of elimination the answer is B.
+\end{document}
