@@ -13,10 +13,6 @@ First let's load the tidyverse and our dataset:
 #+begin_src R :session :results none
   library(tidyverse)
   companies = readRDS("../ICE3/North American Stock Market 1994-2018.rds")
-
-  ### just putting this in to suppress annoying warnings
-  ### feel free to ignore
-  dim(companies)
 #+end_src
 ** Question 1, 1.25 pts
 Okay so right away I have a feeling this quiz is going to be an awful lot of ~group_by()~ which is annoying because underscores are awkward to type quickly.  But I digress.  The question asks us to compute aggregate values for all companies, per fiscal year, so that's our cue to group by ~fyear~.
