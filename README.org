@@ -1,2 +1,8 @@
 * BA 515 - Fundamentals of Analytics and Tech
-This repository holds solutions to the in-class exercises (aka "ICEs") for BA 515
+This repository holds solutions to the in-class exercises (aka "ICEs") for BA 515.  There are PDFs of the solutions in each subdirectory:
+
+[[https://github.com/nathanvy/BA515/blob/master/ICE1/ice1.pdf][- ICE1.pdf]]
+- [[https://github.com/nathanvy/BA515/blob/master/ICE2/ice2.pdf][ICE2.pdf]]
+- [[https://github.com/nathanvy/BA515/blob/master/ICE3/ice3.pdf][ICE3.pdf]]
+- [[https://github.com/nathanvy/BA515/blob/master/ICE4/ice4.pdf][ICE4.pdf]]
+
