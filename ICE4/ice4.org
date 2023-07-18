@@ -38,18 +38,18 @@ Pretty straightforward.  First we'll group by ~gvkey~ and then we'll compute a m
 
 #+ATTR_LATEX: :options frame=single
 #+begin_src R :session
-    q2 = companies %>%
-      group_by(gvkey) %>%
-      mutate(mat = max(at)) %>%
-      filter(mat >= 100)
+  q2 = companies %>%
+    group_by(gvkey) %>%
+    mutate(mat = max(at, na.rm = TRUE)) %>%
+    filter(mat >= 100)
 
   nrow(q2)
 #+end_src
 
-Interestingly enough, the answer is "none of the above":
+Interestingly enough, the answer is "none of the above" if you forget to filter out missing ~at~ values, but otherwise you get the correct answer which is:
 
 #+RESULTS:
-: 153995
+: 177391
 
 ** Question 3, 1.25 pts
 This question asks us to run the following code and describe its contents/what it represents.  I'll reproduce only the first few rows for brevity:
