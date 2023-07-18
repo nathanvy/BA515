@@ -54,12 +54,14 @@ Let's see if it works, using ~magrittr~-style pipes. I'm going to add the ~gvkey
 
 #+ATTR_LATEX: :options frame=single
 #+begin_src R :session
-  q3 = companies %>%
-    select(gvkey, lt, at) %>%
-    filter(lt>=10, at>=10, !is.na(lt), !is.na(at)) %>%
-    mutate(ratio = at/lt)
-  
-max(q3$ratio)
+     q3 = companies %>%
+       select(gvkey, lt, at) %>%
+       filter(!is.na(lt), !is.na(at)) %>%
+       filter(lt>=10) %>%
+       filter(at>=10) %>%
+       mutate(ratio = at/lt)
+
+   max(q3$ratio)
 #+end_src
 
 We could round that if we wanted but it's close enough to see that the answer is B:

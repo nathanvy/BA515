@@ -1,0 +1,164 @@
+#+STARTUP: inlineimages
+#+OPTIONS: num:nil toc:nil
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usepackage{parskip}
+* In-Class Exercise 5
+Nathan Van Ymeren
+** Preface:
+In previous documents I reproduced the question text entirely.  This time to make it clearer I'm going to omit the question text and just have some explanatory prose in each section.
+
+First let's load the tidyverse and our dataset:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session :results none
+  library(tidyverse)
+  setwd("~/Developer/r/")
+  companies = readRDS("~/Developer/r/North American Stock Market 1994-2018.rds")
+#+end_src
+** Question 1
+So this question doesn't technically require us to run the code, if we know what the dataset looks like, but I ran it anyway because we need it for the following questions.
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session :results none
+  q1 = companies %>%
+    filter(fyear >= 2016, fyear <= 2017, at >= 10, sale >= 10) %>%
+    select(gvkey, fyear, conm, at, sale)
+#+end_src
+
+If you look at the first few rows of the data you can see that you can't uniquely address rows by ~gvkey~ alone, but you could by the combination of ~gvkey~ and ~fyear~, so we'll go with answer B.
+** Question 2
+Not too different from Question 1 but this time they want us to filter differently and then merge the result with the dataset from question 1, so let's just go ahead and do that:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session
+    q2 = companies %>%
+      filter(fyear >= 2017, fyear <= 2018) %>%
+      filter(at >= 100, sale >= 100) %>%
+      select(gvkey, fyear, tic, ni)
+
+  merged1 = inner_join(q1, q2, by = c("gvkey" = "gvkey", "fyear" = "fyear"))
+
+nrow(merged1)
+#+end_src
+
+And calling ~nrow()~ gives us our answer, which is:
+
+#+RESULTS:
+: 4303
+** Question 3
+Another one where you /technically/ don't need to run the code but you need the dataframe for question 4 so why not.
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session :results none
+  q3 = companies %>%
+    filter(at >= 50, sale >= 50, !is.na(emp), !is.na(ni)) %>%
+    mutate(ROA = ni / at) %>%
+    group_by(gvkey) %>%
+    summarise(ROA_avg = mean(ROA))
+#+end_src
+
+This time because we've condensed (reduced) the dataset using what R calls summary functions, we have only two columns which are ~gvkey~ and ~ROA_avg~ meaning we can uniquely address any row by its ~gvkey~, unlike in question 1.  So the answer is A.
+
+** Question 4
+Counting the number of observations (rows) is trivial:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session
+  nrow(q3)
+#+end_src
+
+And our answer is:
+
+#+RESULTS:
+: 13835
+
+** Question 5
+So /technicallyyyyyy/ there's a single row that has an ~NA~ value for fiscal year, but non-missing employment data.  Whether or not that row should be included is not clear.  That single row can be found like so:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session
+  companies %>%
+    filter(is.na(fyear), !is.na(emp)) %>%
+    select(gvkey, fyear, emp)
+#+end_src
+
+And voila:
+
+#+RESULTS:
+| gvkey | fyear |   emp |
+|-------+-------+-------|
+| 20115 |   NA  | 1.033 |
+
+Anyways, it'll change the answer by 1 depending on whether or not you include this row.  But assuming we keep this row:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session
+  q5 = companies %>%
+    filter(!is.na(emp)) %>%
+    group_by(gvkey) %>%
+    summarise(emp_avg = mean(emp))
+
+merge5 = inner_join(q3, q5, by = "gvkey")
+
+nrow(merge5)
+#+end_src
+
+Which produces:
+
+#+RESULTS:
+: 13835
+
+** Question 6
+This question and the next few are meant to get you to reason about the code but you can always make a mockup:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session 
+  student1 = tibble(ubcid = c(1, 2, 3, 4, 5, 6, 7))
+  student2 = tibble(ubcid = c(5, 6, 7, 8, 9, 10, 11, 12, 13, 14))
+  merge6 <- left_join(student1, student2)
+  nrow(merge6)
+#+end_src
+
+That gives:
+
+#+RESULTS:
+: 7
+
+So there are exactly seven (thousand) rows in what the question refers to as ~merged1~.
+
+** Question 7
+This time it's a left-join:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session
+  merge7 <- left_join(student2, student1)
+  nrow(merge7)
+#+end_src
+
+This time our answer is:
+
+#+RESULTS:
+: 10
+
+So there are exactly ten (thousand) rows in what the question refers to as ~merged2~.
+
+** Question 8
+
+Inner joins (per the question) on these sets ought to produce 3000 rows based on what they gave us.  Let's see:
+
+#+ATTR_LATEX: :options frame=single
+#+begin_src R :session
+  merge8 <- inner_join(student1, student2)
+  nrow(merge8)
+#+end_src
+
+Gives:
+
+#+RESULTS:
+: 3
+
+Yup.
+ 
+ 
+** Question 9
+This one you don't even really need to think about.  We merged on more than one key variable in Question 2, so clearly this is False.
