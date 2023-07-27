@@ -8,3 +8,4 @@ This repository holds solutions to the in-class exercises (aka "ICEs") for BA 51
 - [[https://github.com/nathanvy/BA515/blob/master/ICE5/ice5.pdf][ICE5.pdf]]
 - [[https://github.com/nathanvy/BA515/blob/master/ICE6/ice6.pdf][ICE6.pdf]]
 
+Blank quizzes can be found in the [[https://github.com/nathanvy/BA515/blob/master/blanks/][blanks/]] folder.  ~.rds~ data files and related are under [[https://github.com/nathanvy/BA515/blob/master/data/][data/]].
